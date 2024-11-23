@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AL_EmpFeedbackSystem.Migrations
 {
     [DbContext(typeof(AL_EmpFeedbackSystemDbContext))]
-    [Migration("20241123093141_InitialCreate")]
+    [Migration("20241123094834_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
