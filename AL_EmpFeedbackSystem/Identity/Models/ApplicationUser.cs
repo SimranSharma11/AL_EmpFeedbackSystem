@@ -7,7 +7,8 @@ namespace AL_EmpFeedbackSystem.Identity.Models
 {
     public class ApplicationUser: IdentityUser
     {
-        public string FullName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public bool ActiveStatus { get; set; }
         public string? LeadId { get; set; }
 

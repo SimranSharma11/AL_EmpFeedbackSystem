@@ -24,6 +24,7 @@ builder.Services.AddDbContext<AL_EmpFeedbackSystemDbContext>(options =>
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
     .AddEntityFrameworkStores<AL_EmpFeedbackSystemDbContext>()
     .AddDefaultTokenProviders();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddAuthentication(options =>
 {

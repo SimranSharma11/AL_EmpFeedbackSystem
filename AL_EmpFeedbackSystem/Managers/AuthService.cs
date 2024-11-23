@@ -29,7 +29,8 @@ namespace AL_EmpFeedbackSystem.Managers
             {
                 UserName = model.Email,
                 Email = model.Email,
-                FullName = model.FullName,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
                 CreatedBy = "SYSTEM",
                 CreatedDate = DateTime.Now
             };
