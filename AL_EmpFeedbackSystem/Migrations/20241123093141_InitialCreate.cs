@@ -31,8 +31,15 @@ namespace AL_EmpFeedbackSystem.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ActiveStatus = table.Column<bool>(type: "bit", nullable: false),
+                    LeadId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ManagerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    DataOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    PostalCode = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedBy = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -51,6 +58,16 @@ namespace AL_EmpFeedbackSystem.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_AspNetUsers_LeadId",
+                        column: x => x.LeadId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_AspNetUsers_ManagerId",
+                        column: x => x.ManagerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -190,6 +207,16 @@ namespace AL_EmpFeedbackSystem.Migrations
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_LeadId",
+                table: "AspNetUsers",
+                column: "LeadId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_ManagerId",
+                table: "AspNetUsers",
+                column: "ManagerId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
