@@ -5,7 +5,7 @@ using System;
 
 namespace AL_EmpFeedbackSystem.DbModels
 {
-    public class AL_EmpFeedbackSystemDbContext: IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
+    public class AL_EmpFeedbackSystemDbContext: IdentityDbContext<ApplicationUser, ApplicationRole, int>
     {
         public AL_EmpFeedbackSystemDbContext(DbContextOptions<AL_EmpFeedbackSystemDbContext> options) : base(options) { }
     }
