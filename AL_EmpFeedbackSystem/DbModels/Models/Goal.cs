@@ -19,6 +19,6 @@ namespace AL_EmpFeedbackSystem.DbModels.Models
 
         public DateTime? UpdatedDate { get; set; }
 
-        public int? UpdatedBy { get; set; }
+        public string? UpdatedBy { get; set; }
     }
 }
