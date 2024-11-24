@@ -1,7 +1,9 @@
 using AL_EmpFeedbackSystem.DbModels;
 using AL_EmpFeedbackSystem.Identity.Models;
 using AL_EmpFeedbackSystem.Interface;
+using AL_EmpFeedbackSystem.IRepository;
 using AL_EmpFeedbackSystem.Managers;
+using AL_EmpFeedbackSystem.Repository;
 using AL_EmpFeedbackSystem.Roles;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -51,6 +53,8 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
@@ -70,6 +74,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseAuthentication(); 
 
 app.MapControllers();
 

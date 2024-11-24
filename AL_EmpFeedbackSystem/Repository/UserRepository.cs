@@ -1,0 +1,225 @@
+﻿using AL_EmpFeedbackSystem.DbModels;
+using AL_EmpFeedbackSystem.Entity.User;
+using AL_EmpFeedbackSystem.Identity.Models;
+using AL_EmpFeedbackSystem.IRepository;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+
+namespace AL_EmpFeedbackSystem.Repository
+{
+    public class UserRepository : IUserRepository
+    {
+        private readonly AL_EmpFeedbackSystemDbContext _entities;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
+
+        public UserRepository(AL_EmpFeedbackSystemDbContext entities, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
+        {
+            _entities = entities;
+            _userManager = userManager;
+            _roleManager = roleManager;
+        }
+
+        /// <summary>
+        /// CreateUser
+        /// </summary>
+        /// <param name="userCreate"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<string> CreateUser(UserCreate userCreate)
+        {
+            var role = _entities.Roles.FirstOrDefault(x => x.Id == userCreate.RoleId);
+            if (userCreate.Id == 0)
+            {
+                var user = new ApplicationUser();
+                user.FirstName = userCreate.FirstName;
+                user.LastName = userCreate.LastName;
+                user.DateOfBirth = userCreate.DateOfBirth;
+                user.Email = userCreate.Email;
+                user.UserName = userCreate.Email;
+                user.ActiveStatus = true;
+                user.LeadId = null;
+                user.ManagerId = null;
+                user.Address = userCreate.Address;
+                user.PostalCode = userCreate.PostalCode;
+                user.CreatedBy = "SYSTEM";
+                var password = GeneratePassword();
+                var result = await _userManager.CreateAsync(user, password);
+                if (!result.Succeeded)
+                    throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
+
+                var roleExists = await _roleManager.RoleExistsAsync(role.Name);
+                if (!roleExists)
+                    throw new Exception("Role does not exist.");
+
+                await _userManager.AddToRoleAsync(user, role.Name);
+                return "User registered successfully!";
+            }
+            else
+            {
+                var user = new ApplicationUser();
+                user.Id = userCreate.Id;
+                user.FirstName = userCreate.FirstName;
+                user.LastName = userCreate.LastName;
+                user.DateOfBirth = userCreate.DateOfBirth;
+                user.Email = userCreate.Email;
+                user.LeadId = userCreate.LeadId;
+                user.ManagerId = userCreate.ManagerId;
+                user.Address = userCreate.Address;
+                user.PostalCode = userCreate.PostalCode;
+                user.UpdatedDate = DateTime.Now;
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
+                    throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
+                if (role.Id != userCreate.RoleId)
+                {
+                    var roleExists = await _roleManager.RoleExistsAsync(role.Name);
+                    if (!roleExists)
+                        throw new Exception("Role does not exist.");
+
+                    await _userManager.AddToRoleAsync(user, role.Name);
+                }
+
+                return "User Updated successfully!";
+            }
+        }
+
+        public async Task<bool> FindUserByEmail(string email)
+        {
+            var user = _entities.Users.Where(x => x.Email.Equals(email)).ToList();
+            return user.Count() > 0 ? true : false;
+
+        }
+
+        private static string GeneratePassword(int length = 8)
+        {
+            const string upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string lowerCase = "abcdefghijklmnopqrstuvwxyz";
+            const string digits = "0123456789";
+            const string specialChars = "!@#$%^&*()";
+
+            // Combine the valid character sets
+            const string validChars = upperCase + lowerCase + digits + specialChars;
+
+            // Generate a password
+            var password = new char[length];
+
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                // Ensure at least one character from each category (upper, lower, digit, special) is included
+                password[0] = upperCase[RandomNumber(rng, upperCase.Length)];
+                password[1] = lowerCase[RandomNumber(rng, lowerCase.Length)];
+                password[2] = digits[RandomNumber(rng, digits.Length)];
+                password[3] = specialChars[RandomNumber(rng, specialChars.Length)];
+
+                // Fill in the rest of the password with random characters from the valid set
+                for (int i = 4; i < length; i++)
+                {
+                    password[i] = validChars[RandomNumber(rng, validChars.Length)];
+                }
+
+                // Shuffle the password to ensure randomness
+                return new string(password.OrderBy(c => RandomNumberGenerator.GetInt32(0, length)).ToArray());
+            }
+        }
+
+        private static int RandomNumber(RandomNumberGenerator rng, int max)
+        {
+            var bytes = new byte[4];
+            rng.GetBytes(bytes);
+            return BitConverter.ToInt32(bytes, 0) & int.MaxValue % max;
+        }
+        /// <summary>
+        /// GetUserByIdAsync
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<UserCreate> GetUserByIdAsync(int userId)
+        {
+            if (userId <= 0)
+            {
+                throw new ArgumentException("Invalid user ID", nameof(userId));
+            }
+
+            var user = await _entities.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            var userCreate = new UserCreate
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                DateOfBirth = user.DateOfBirth,
+                Email = user.Email,
+                LeadId = user.LeadId,
+                ManagerId = user.ManagerId,
+                Address = user.Address,
+                PostalCode = user.PostalCode
+            };
+
+            var userRole = await _entities.UserRoles.FirstOrDefaultAsync(x => x.UserId == user.Id);
+            if (userRole != null)
+            {
+                userCreate.RoleId = userRole.RoleId;
+            }
+
+            return userCreate;
+        }
+
+        /// <summary>
+        /// DeleteUserByIdAsync
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<string> DeleteUserByIdAsync(int userId)
+        {
+
+            if (userId > 0)
+            {
+                var user = await _entities.Users.FindAsync(userId);
+                if (user != null)
+                {
+                    user.ActiveStatus = false;
+                    await _entities.SaveChangesAsync();
+                    return "Deleted Successfully";
+                }
+                else
+                {
+                    return "User not found";
+                }
+            }
+            else
+            {
+                return "Invalid User";
+            }
+
+        }
+
+        /// <summary>
+        /// GetAssignedUserAsync
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<List<UserCreate>> GetAssignedUserAsync(int userId)
+        {
+            return await _entities.Users.Where(x => (x.LeadId == userId || x.ManagerId == userId) && x.ActiveStatus == true)
+                .Select(x => new UserCreate
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    DateOfBirth = x.DateOfBirth,
+                    Email = x.Email,
+                    LeadId = x.LeadId,
+                    ManagerId = x.ManagerId,
+                    Address = x.Address,
+                    PostalCode = x.PostalCode
+                }).ToListAsync();
+        }
+    }
+}

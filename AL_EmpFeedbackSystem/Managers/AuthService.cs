@@ -62,6 +62,7 @@ namespace AL_EmpFeedbackSystem.Managers
             var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
