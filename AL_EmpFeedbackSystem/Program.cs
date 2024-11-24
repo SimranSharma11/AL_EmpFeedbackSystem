@@ -87,6 +87,7 @@ builder.Services.AddScoped<IGoalRepository, GoalRepository>();
 builder.Services.AddScoped<IGoalService, GoalService>();
 builder.Services.AddScoped<IUserGoalRepository, UserGoalRepository>();
 builder.Services.AddScoped<IUserGoalService, UserGoalService>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 

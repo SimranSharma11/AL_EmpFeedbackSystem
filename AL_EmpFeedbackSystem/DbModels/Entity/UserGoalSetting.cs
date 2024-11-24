@@ -27,7 +27,7 @@ namespace AL_EmpFeedbackSystem.DbModels.Entity
         public string? LeadComment { get; set; }
         public DateTime CreatedDate { get; set; }
 
-        public int CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
 
         public DateTime? UpdatedDate { get; set; }
 

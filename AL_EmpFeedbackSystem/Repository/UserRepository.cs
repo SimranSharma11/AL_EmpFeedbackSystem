@@ -14,12 +14,14 @@ namespace AL_EmpFeedbackSystem.Repository
         private readonly AL_EmpFeedbackSystemDbContext _entities;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IEmailSender _emailSender;
 
-        public UserRepository(AL_EmpFeedbackSystemDbContext entities, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
+        public UserRepository(AL_EmpFeedbackSystemDbContext entities, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IEmailSender emailSender)
         {
             _entities = entities;
             _userManager = userManager;
             _roleManager = roleManager;
+            _emailSender = emailSender;
         }
 
         /// <summary>
@@ -58,6 +60,18 @@ namespace AL_EmpFeedbackSystem.Repository
                     throw new Exception("Role does not exist.");
 
                 await _userManager.AddToRoleAsync(user, role.Name);
+                var emailSubject = "Your account has been created";
+                var emailBody = $"Hello {user.FirstName} {user.LastName},\n\nYour account has been created successfully. " +
+                                $"Your login password is: {password}\n\nPlease change your password after logging in.";
+
+                try
+                {
+                    await _emailSender.SendEmailAsync(userCreate.Email, emailSubject, emailBody);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error sending email: {ex.Message}");
+                }
                 return "User registered successfully!";
             }
             else
