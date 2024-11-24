@@ -1,9 +1,7 @@
 ﻿using AL_EmpFeedbackSystem.Entity.Login;
 using AL_EmpFeedbackSystem.Entity.Register;
 using AL_EmpFeedbackSystem.Interface;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace AL_EmpFeedbackSystem.Controllers
 {
@@ -45,20 +43,5 @@ namespace AL_EmpFeedbackSystem.Controllers
                 return Unauthorized(ex.Message);
             }
         }
-
-        //[Authorize(Roles = "Super Admin")]
-        //[HttpGet("admin-data")]
-        //public IActionResult GetAdminData()
-        //{
-        //    return Ok("This data is for Super Admin only.");
-        //}
-
-        //[Authorize(Roles = "Manager")]
-        //[HttpGet("manager-data")]
-        //public IActionResult GetManagerData()
-        //{
-        //    return Ok("This data is for Managers.");
-        //}
-
     }
 }

@@ -29,9 +29,15 @@ namespace AL_EmpFeedbackSystem.Managers
             {
                 UserName = model.Email,
                 Email = model.Email,
-                FirstName = model.FullName,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Address = model.Address,
+                PostalCode = model.PostalCode,
+                DesignationId = (int)(model.DesignationId > 0 ? model.DesignationId : 5),
                 CreatedBy = "SYSTEM",
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.Now,
+                UpdatedBy = null,
+                UpdatedDate = null
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
