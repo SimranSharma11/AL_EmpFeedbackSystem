@@ -10,5 +10,10 @@ namespace AL_EmpFeedbackSystem.DbModels
     {
         public AL_EmpFeedbackSystemDbContext(DbContextOptions<AL_EmpFeedbackSystemDbContext> options) : base(options) { }
         public virtual DbSet<Designation> Designations { get; set; }
+        public virtual DbSet<Duration> Durations { get; set; }
+        public virtual DbSet<Frequency> Frequencies { get; set; }
+        public virtual DbSet<Goal> Goals { get; set; }
+        public virtual DbSet<UserGoalSetting> UserGoalSettings { get; set; }
+        public virtual DbSet<UserRating> UserRatings { get; set; }
     }
 }
