@@ -4,6 +4,7 @@ using AL_EmpFeedbackSystem.DbModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AL_EmpFeedbackSystem.Migrations
 {
     [DbContext(typeof(AL_EmpFeedbackSystemDbContext))]
-    partial class AL_EmpFeedbackSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241124143723_UserRating")]
+    partial class UserRating
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,6 +72,9 @@ namespace AL_EmpFeedbackSystem.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("DurationId")
+                        .HasColumnType("int");
 
                     b.Property<int>("FrequencyId")
                         .HasColumnType("int");

@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AL_EmpFeedbackSystem.DbModels.Entity
 {
     public class UserRating
     {
+        [Key]
         public int Id { get; set; }
         public int UserGoalSettingId { get; set; }
         [ForeignKey("UserGoalSettingId")]
