@@ -4,6 +4,7 @@ using AL_EmpFeedbackSystem.DbModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AL_EmpFeedbackSystem.Migrations
 {
     [DbContext(typeof(AL_EmpFeedbackSystemDbContext))]
-    partial class AL_EmpFeedbackSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241124180035_Usergoalsettingschemaupdate")]
+    partial class Usergoalsettingschemaupdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -28,7 +28,8 @@ namespace AL_EmpFeedbackSystem.Controllers
         {
             try
             {
-                var result = await _userService.CreateUser(userCreate);
+                var loggedInUserName = this.HttpContext.GetUserName();
+                var result = await _userService.CreateUser(userCreate, loggedInUserName);
                 return Ok(new { message = "User created successfully", data = result });
             }
             catch (Exception ex)
@@ -72,7 +73,8 @@ namespace AL_EmpFeedbackSystem.Controllers
         {
             try
             {
-                var result = await _userService.DeleteUserByIdAsync(userId);
+                var loggedInUserName = this.HttpContext.GetUserName();
+                var result = await _userService.DeleteUserByIdAsync(userId, loggedInUserName);
                 return Ok(new { message = result });
             }
             catch (Exception ex)
@@ -130,5 +132,53 @@ namespace AL_EmpFeedbackSystem.Controllers
             }
         }
 
+        /// <summary>
+        /// Get Designation list.
+        /// </summary>
+        /// <returns>A list of Designation Id and Name.</returns>
+        [HttpGet("GetDesignationList")]
+        public async Task<IActionResult> GetDesignationList()
+        {
+            try
+            {
+                var result = await _userService.GetDesignationList();
+
+                if (result == null || result.Count == 0)
+                {
+                    return NotFound(new { message = "No User Present." });
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
+
+        /// <summary>
+        /// Get Role list.
+        /// </summary>
+        /// <returns>A list of Role Id and Name.</returns>
+        [HttpGet("GetRoleList")]
+        public async Task<IActionResult> GetRoleList()
+        {
+            try
+            {
+                var result = await _userService.GetDesignationList();
+
+                if (result == null || result.Count == 0)
+                {
+                    return NotFound(new { message = "No User Present." });
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
     }
 }

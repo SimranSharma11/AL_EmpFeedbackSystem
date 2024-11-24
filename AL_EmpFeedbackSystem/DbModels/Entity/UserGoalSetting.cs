@@ -21,6 +21,10 @@ namespace AL_EmpFeedbackSystem.DbModels.Entity
         [ForeignKey("DurationId")]
         public virtual Duration Duration { get; set; }
 
+        public int? SelfRating {  get; set; }
+        public string? SelfComment { get; set; }
+        public int? LeadRating { get; set; }
+        public string? LeadComment { get; set; }
         public DateTime CreatedDate { get; set; }
 
         public int CreatedBy { get; set; }

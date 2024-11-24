@@ -85,6 +85,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IGoalRepository, GoalRepository>();
 builder.Services.AddScoped<IGoalService, GoalService>();
+builder.Services.AddScoped<IUserGoalRepository, UserGoalRepository>();
+builder.Services.AddScoped<IUserGoalService, UserGoalService>();
 
 var app = builder.Build();
 

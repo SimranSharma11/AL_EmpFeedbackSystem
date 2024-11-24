@@ -28,7 +28,7 @@ namespace AL_EmpFeedbackSystem.Repository
         /// <param name="userCreate"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<string> CreateUser(UserCreate userCreate)
+        public async Task<string> CreateUser(UserCreate userCreate, string loggedInUserName)
         {
             var role = _entities.Roles.FirstOrDefault(x => x.Id == userCreate.RoleId);
             if (userCreate.Id == 0)
@@ -39,12 +39,15 @@ namespace AL_EmpFeedbackSystem.Repository
                 user.DateOfBirth = userCreate.DateOfBirth;
                 user.Email = userCreate.Email;
                 user.UserName = userCreate.Email;
-                user.ActiveStatus = true;
-                user.LeadId = null;
-                user.ManagerId = null;
+                user.ActiveStatus = userCreate.ActiveStatus;
+                user.ServiceStartDate = userCreate.ServiceStartDate;
+                user.ServiceEndDate = userCreate.ServiceEndDate;
+                user.DesignationId = userCreate.DesignationId;
+                user.LeadId = userCreate.LeadId;
+                user.ManagerId = userCreate.ManagerId;
                 user.Address = userCreate.Address;
                 user.PostalCode = userCreate.PostalCode;
-                user.CreatedBy = "SYSTEM";
+                user.CreatedBy = loggedInUserName;
                 var password = GeneratePassword();
                 var result = await _userManager.CreateAsync(user, password);
                 if (!result.Succeeded)
@@ -67,9 +70,13 @@ namespace AL_EmpFeedbackSystem.Repository
                 user.Email = userCreate.Email;
                 user.LeadId = userCreate.LeadId;
                 user.ManagerId = userCreate.ManagerId;
+                user.ActiveStatus = userCreate.ActiveStatus;
+                user.ServiceStartDate = userCreate.ServiceStartDate;
+                user.ServiceEndDate = userCreate.ServiceEndDate;
                 user.Address = userCreate.Address;
                 user.PostalCode = userCreate.PostalCode;
                 user.UpdatedDate = DateTime.Now;
+                user.UpdatedBy = loggedInUserName;
                 var result = await _userManager.UpdateAsync(user);
                 if (!result.Succeeded)
                     throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
@@ -190,7 +197,7 @@ namespace AL_EmpFeedbackSystem.Repository
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<string> DeleteUserByIdAsync(int userId)
+        public async Task<string> DeleteUserByIdAsync(int userId,string loggedInUserName)
         {
 
             if (userId > 0)
@@ -199,6 +206,9 @@ namespace AL_EmpFeedbackSystem.Repository
                 if (user != null)
                 {
                     user.ActiveStatus = false;
+                    user.IsDeleted = true;
+                    user.UpdatedDate = DateTime.UtcNow;
+                    user.UpdatedBy = loggedInUserName;
                     await _entities.SaveChangesAsync();
                     return "Deleted Successfully";
                 }
@@ -221,7 +231,7 @@ namespace AL_EmpFeedbackSystem.Repository
         /// <returns></returns>
         public async Task<List<UserCreate>> GetAssignedUserAsync(int userId)
         {
-            return await _entities.Users.Where(x => (x.LeadId == userId || x.ManagerId == userId) && x.ActiveStatus == true)
+            return await _entities.Users.Where(x => (x.LeadId == userId || x.ManagerId == userId) && x.ActiveStatus == true && x.IsDeleted == false)
                 .Select(x => new UserCreate
                 {
                     Id = x.Id,
@@ -240,13 +250,41 @@ namespace AL_EmpFeedbackSystem.Repository
         /// GetUsersList
         /// </summary>
         /// <returns></returns>
-        public async Task<List<UserDetails>> GetUsersList()
+        public async Task<List<ReferenceData>> GetUsersList()
         {
-            return await _entities.Users.Where(x => x.ActiveStatus == true)
-                .Select(x => new UserDetails
+            return await _entities.Users.Where(x => x.ActiveStatus == true && x.IsDeleted == false)
+                .Select(x => new ReferenceData
                 {
                     Id = x.Id,
                     Name = x.FirstName.GetFullName(x.LastName),
+                }).AsNoTracking().ToListAsync();
+        }
+
+        /// <summary>
+        /// GetDesignationList
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<ReferenceData>> GetDesignationList()
+        {
+            return await _entities.Designations.Where(x => x.IsActive == true)
+                .Select(x => new ReferenceData
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).AsNoTracking().ToListAsync();
+        }
+
+        /// <summary>
+        /// GetDesignationList
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<ReferenceData>> GetRoleList()
+        {
+            return await _entities.Roles
+                .Select(x => new ReferenceData
+                {
+                    Id = x.Id,
+                    Name = x.Name,
                 }).AsNoTracking().ToListAsync();
         }
     }

@@ -12,5 +12,9 @@
         public string Address { get; set; }
         public int PostalCode { get; set; }
         public int RoleId { get; set; }
+        public int DesignationId { get; set; }
+        public DateTime ServiceStartDate { get; set; }
+        public DateTime? ServiceEndDate { get; set; }
+        public bool ActiveStatus { get; set; }
     }
 }

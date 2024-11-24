@@ -20,14 +20,14 @@ namespace AL_EmpFeedbackSystem.Managers
         /// </summary>
         /// <param name="userCreate">The user details to create.</param>
         /// <returns>A response message indicating success or failure.</returns>
-        public async Task<string> CreateUser(UserCreate userCreate)
+        public async Task<string> CreateUser(UserCreate userCreate, string loggedInUserName)
         {
             bool isEmailExist = false;
             if (userCreate.Id == 0)
                 isEmailExist = await _userRepository.FindUserByEmail(userCreate.Email);
             if (!isEmailExist || userCreate.Id > 0)
             {
-                var response = await _userRepository.CreateUser(userCreate);
+                var response = await _userRepository.CreateUser(userCreate, loggedInUserName);
                 return response;
             }
             return "Email Already Exist";
@@ -49,9 +49,9 @@ namespace AL_EmpFeedbackSystem.Managers
         /// </summary>
         /// <param name="userId">The ID of the user.</param>
         /// <returns>A response message indicating success or failure.</returns>
-        public async Task<string> DeleteUserByIdAsync(int id)
+        public async Task<string> DeleteUserByIdAsync(int id, string loggedInUserName)
         {
-            var result = await _userRepository.DeleteUserByIdAsync(id);
+            var result = await _userRepository.DeleteUserByIdAsync(id, loggedInUserName);
             return result;
         }
 
@@ -70,9 +70,29 @@ namespace AL_EmpFeedbackSystem.Managers
         /// Get users list.
         /// </summary>
         /// <returns>A list of users Id and Name.</returns>
-        public async Task<List<UserDetails>> GetUsersList()
+        public async Task<List<ReferenceData>> GetUsersList()
         {
             var result = await _userRepository.GetUsersList();
+            return result;
+        }
+
+        /// <summary>
+        /// Get Designation list.
+        /// </summary>
+        /// <returns>A list of users Id and Name.</returns>
+        public async Task<List<ReferenceData>> GetDesignationList()
+        {
+            var result = await _userRepository.GetDesignationList();
+            return result;
+        }
+
+        /// <summary>
+        /// Get Role list.
+        /// </summary>
+        /// <returns>A list of roles Id and Name.</returns>
+        public async Task<List<ReferenceData>> GetRoleList()
+        {
+            var result = await _userRepository.GetRoleList();
             return result;
         }
     }

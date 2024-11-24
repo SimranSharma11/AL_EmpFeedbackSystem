@@ -9,7 +9,7 @@ namespace AL_EmpFeedbackSystem.Interface
         /// </summary>
         /// <param name="userCreate">The user details to create.</param>
         /// <returns>A response message indicating success or failure.</returns>
-        Task<string> CreateUser(UserCreate userCreate);
+        Task<string> CreateUser(UserCreate userCreate, string loggedInUserName);
 
         /// <summary>
         /// Get user details by ID.
@@ -23,7 +23,7 @@ namespace AL_EmpFeedbackSystem.Interface
         /// </summary>
         /// <param name="userId">The ID of the user.</param>
         /// <returns>A response message indicating success or failure.</returns>
-        Task<string> DeleteUserByIdAsync(int id);
+        Task<string> DeleteUserByIdAsync(int id, string loggedInUserName);
 
         /// <summary>
         /// Get users assigned to the logged-in user.
@@ -35,6 +35,18 @@ namespace AL_EmpFeedbackSystem.Interface
         /// Get users list.
         /// </summary>
         /// <returns>A list of users Id and Name.</returns>
-        Task<List<UserDetails>> GetUsersList();
+        Task<List<ReferenceData>> GetUsersList();
+
+        /// <summary>
+        /// Get Designation list.
+        /// </summary>
+        /// <returns>A list of users Id and Name.</returns>
+        Task<List<ReferenceData>> GetDesignationList();
+
+        /// <summary>
+        /// Get roles list.
+        /// </summary>
+        /// <returns>A list of roles Id and Name.</returns>
+        Task<List<ReferenceData>> GetRoleList();
     }
 }
