@@ -34,6 +34,7 @@ namespace AL_EmpFeedbackSystem.Managers
                 Address = model.Address,
                 PostalCode = model.PostalCode,
                 DesignationId = (int)(model.DesignationId > 0 ? model.DesignationId : 5),
+                ActiveStatus = true,
                 CreatedBy = "SYSTEM",
                 CreatedDate = DateTime.Now,
                 UpdatedBy = null,
