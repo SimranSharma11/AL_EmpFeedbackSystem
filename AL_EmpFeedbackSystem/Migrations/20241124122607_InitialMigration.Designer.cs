@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AL_EmpFeedbackSystem.Migrations
 {
     [DbContext(typeof(AL_EmpFeedbackSystemDbContext))]
-    [Migration("20241123160230_InitialMigration")]
+    [Migration("20241124122607_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,40 @@ namespace AL_EmpFeedbackSystem.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("AL_EmpFeedbackSystem.DbModels.Entity.Designation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Designations");
+                });
 
             modelBuilder.Entity("AL_EmpFeedbackSystem.Identity.Models.ApplicationRole", b =>
                 {
@@ -91,6 +125,9 @@ namespace AL_EmpFeedbackSystem.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("DesignationId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -101,6 +138,9 @@ namespace AL_EmpFeedbackSystem.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -141,6 +181,12 @@ namespace AL_EmpFeedbackSystem.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("ServiceEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ServiceStartDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -155,6 +201,8 @@ namespace AL_EmpFeedbackSystem.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DesignationId");
 
                     b.HasIndex("LeadId");
 
@@ -276,6 +324,12 @@ namespace AL_EmpFeedbackSystem.Migrations
 
             modelBuilder.Entity("AL_EmpFeedbackSystem.Identity.Models.ApplicationUser", b =>
                 {
+                    b.HasOne("AL_EmpFeedbackSystem.DbModels.Entity.Designation", "Designation")
+                        .WithMany("Users")
+                        .HasForeignKey("DesignationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("AL_EmpFeedbackSystem.Identity.Models.ApplicationUser", "Lead")
                         .WithMany()
                         .HasForeignKey("LeadId");
@@ -283,6 +337,8 @@ namespace AL_EmpFeedbackSystem.Migrations
                     b.HasOne("AL_EmpFeedbackSystem.Identity.Models.ApplicationUser", "Manager")
                         .WithMany()
                         .HasForeignKey("ManagerId");
+
+                    b.Navigation("Designation");
 
                     b.Navigation("Lead");
 
@@ -338,6 +394,11 @@ namespace AL_EmpFeedbackSystem.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AL_EmpFeedbackSystem.DbModels.Entity.Designation", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

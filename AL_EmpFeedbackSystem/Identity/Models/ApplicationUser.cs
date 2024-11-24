@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using AL_EmpFeedbackSystem.DbModels.Entity;
 
 namespace AL_EmpFeedbackSystem.Identity.Models
 {
@@ -19,7 +20,12 @@ namespace AL_EmpFeedbackSystem.Identity.Models
         public virtual ApplicationUser Manager { get; set; } 
 
         public DateTime DateOfBirth { get; set; }
-
+        public int DesignationId { get; set; }
+        [ForeignKey(nameof(DesignationId))]
+        public virtual Designation Designation { get; set; }
+        public DateTime ServiceStartDate { get; set; }
+        public DateTime? ServiceEndDate { get; set; }
+        public bool IsDeleted { get; set; } = false;
         [MaxLength(250)]
         public string Address { get; set; }
         public int PostalCode { get; set; }
