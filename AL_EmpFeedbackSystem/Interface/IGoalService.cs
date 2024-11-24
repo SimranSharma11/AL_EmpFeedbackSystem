@@ -1,4 +1,5 @@
-﻿using AL_EmpFeedbackSystem.Entity.Goal;
+﻿using AL_EmpFeedbackSystem.DbModels.Entity;
+using AL_EmpFeedbackSystem.Entity.Goal;
 using AL_EmpFeedbackSystem.Entity.User;
 
 namespace AL_EmpFeedbackSystem.Interface
@@ -25,5 +26,24 @@ namespace AL_EmpFeedbackSystem.Interface
         /// </summary>
         /// <returns>List of Goals.</returns>
         Task<List<GoalDetails>> GetGoalsList();
+
+        /// <summary>
+        /// Getting Duration List
+        /// </summary>
+        /// <param name="frequencyId">The ID of the frequency.</param>
+        /// <returns>List of Duration.</returns>
+        Task<List<DurationDetail>> GetDurationList(int frequencyId);
+
+        /// <summary>
+        /// Getting Frequency List
+        /// </summary>
+        /// <returns>List of Frequency.</returns>
+        Task<List<FrequencyDetail>> GetFrequencyList();
+
+        /// <summary>
+        /// Getting Designation List
+        /// </summary>
+        /// <returns>List of Designations.</returns>
+        Task<List<DesignationDetail>> GetDesignationList();
     }
 }

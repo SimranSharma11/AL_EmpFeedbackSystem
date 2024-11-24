@@ -1,8 +1,6 @@
 ﻿using AL_EmpFeedbackSystem.Entity.Goal;
-using AL_EmpFeedbackSystem.Entity.User;
 using AL_EmpFeedbackSystem.Interface;
 using AL_EmpFeedbackSystem.IRepository;
-using AL_EmpFeedbackSystem.Repository;
 
 namespace AL_EmpFeedbackSystem.Managers
 {
@@ -51,6 +49,37 @@ namespace AL_EmpFeedbackSystem.Managers
         public async Task<List<GoalDetails>> GetGoalsList()
         {
             var result = await _goalRepository.GetGoalsList();
+            return result;
+        }
+
+        /// <summary>
+        /// Getting Duration List
+        /// </summary>
+        /// <param name="frequencyId">The ID of the frequencyId.</param>
+        /// <returns>List of Duration.</returns>
+        public async Task<List<DurationDetail>> GetDurationList(int frequencyId)
+        {
+            var result = await _goalRepository.GetDurationList(frequencyId);
+            return result;
+        }
+
+        /// <summary>
+        /// Getting Frequency List
+        /// </summary>
+        /// <returns>List of Frequency.</returns>
+        public async Task<List<FrequencyDetail>> GetFrequencyList()
+        {
+            var result = await _goalRepository.GetFrequencyList();
+            return result;
+        }
+
+        /// <summary>
+        /// Getting Designation List
+        /// </summary>
+        /// <returns>List of Designations.</returns>
+        public async Task<List<DesignationDetail>> GetDesignationList()
+        {
+            var result = await _goalRepository.GetDesignationList();
             return result;
         }
     }

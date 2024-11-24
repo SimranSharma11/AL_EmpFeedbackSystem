@@ -1,7 +1,6 @@
 ﻿using AL_EmpFeedbackSystem.DbModels;
 using AL_EmpFeedbackSystem.DbModels.Entity;
 using AL_EmpFeedbackSystem.Entity.Goal;
-using AL_EmpFeedbackSystem.Entity.User;
 using AL_EmpFeedbackSystem.Extensions;
 using AL_EmpFeedbackSystem.Identity.Models;
 using AL_EmpFeedbackSystem.IRepository;
@@ -95,6 +94,49 @@ namespace AL_EmpFeedbackSystem.Repository
         {
             return await _entities.Goals.Where(x => x.IsActive == true)
                 .Select(x => new GoalDetails
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).AsNoTracking().ToListAsync();
+        }
+
+        /// <summary>
+        /// Getting Duration List
+        /// </summary>
+        /// <param name="frequencyId">The ID of the frequency.</param>
+        /// <returns>List of Duration.</returns>
+        public async Task<List<DurationDetail>> GetDurationList(int frequencyId)
+        {
+            return await _entities.Durations.Where(x => x.FrequencyId == frequencyId)
+                .Select(x => new DurationDetail
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).AsNoTracking().ToListAsync();
+        }
+
+        /// <summary>
+        /// Getting Frequency List
+        /// </summary>
+        /// <returns>List of Frequency.</returns>
+        public async Task<List<FrequencyDetail>> GetFrequencyList()
+        {
+            return await _entities.Frequencies
+                .Select(x => new FrequencyDetail
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).AsNoTracking().ToListAsync();
+        }
+
+        /// <summary>
+        /// Getting Designation List
+        /// </summary>
+        /// <returns>List of Designation.</returns>
+        public async Task<List<DesignationDetail>> GetDesignationList()
+        {
+            return await _entities.Designations
+                .Select(x => new DesignationDetail
                 {
                     Id = x.Id,
                     Name = x.Name,

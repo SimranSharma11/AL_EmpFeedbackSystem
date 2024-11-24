@@ -81,5 +81,78 @@ namespace AL_EmpFeedbackSystem.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Getting Duration List
+        /// </summary>
+        /// <param name="frequencyId">The ID of the frequency.</param>
+        /// <returns>List of Duration.</returns>
+        [HttpGet("GetDurationListByFreqId")]
+        public async Task<IActionResult> GetDurationList(int frequencyId)
+        {
+            try
+            {
+                var result = await _goalService.GetDurationList(frequencyId);
+
+                if (result == null || result.Count == 0)
+                {
+                    return NotFound(new { message = "Empty." });
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Getting FrequencyList List
+        /// </summary>
+        /// <returns>List of Duration.</returns>
+        [HttpGet("GetFrequencyList")]
+        public async Task<IActionResult> GetFrequencyList()
+        {
+            try
+            {
+                var result = await _goalService.GetFrequencyList();
+
+                if (result == null || result.Count == 0)
+                {
+                    return NotFound(new { message = "Empty." });
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Getting Designation List
+        /// </summary>
+        /// <returns>List of Designations.</returns>
+        [HttpGet("GetDesignationList")]
+        public async Task<IActionResult> GetDesignationList()
+        {
+            try
+            {
+                var result = await _goalService.GetDesignationList();
+
+                if (result == null || result.Count == 0)
+                {
+                    return NotFound(new { message = "Empty." });
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
     }
 }
