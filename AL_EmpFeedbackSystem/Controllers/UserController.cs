@@ -1,12 +1,11 @@
 ﻿using AL_EmpFeedbackSystem.Entity.User;
 using AL_EmpFeedbackSystem.Interface;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AL_EmpFeedbackSystem.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
@@ -106,5 +105,30 @@ namespace AL_EmpFeedbackSystem.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Get users list.
+        /// </summary>
+        /// <returns>A list of users Id and Name.</returns>
+        [HttpGet("GetUsersList")]
+        public async Task<IActionResult> GetUsersList()
+        {
+            try
+            {
+                var result = await _userService.GetUsersList();
+
+                if (result == null || result.Count == 0)
+                {
+                    return NotFound(new { message = "No User Present." });
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
     }
 }

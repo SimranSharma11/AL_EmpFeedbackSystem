@@ -1,5 +1,6 @@
 ﻿using AL_EmpFeedbackSystem.DbModels;
 using AL_EmpFeedbackSystem.Entity.User;
+using AL_EmpFeedbackSystem.Extensions;
 using AL_EmpFeedbackSystem.Identity.Models;
 using AL_EmpFeedbackSystem.IRepository;
 using Microsoft.AspNetCore.Identity;
@@ -85,13 +86,21 @@ namespace AL_EmpFeedbackSystem.Repository
             }
         }
 
+        /// <summary>
+        /// Finding User By Email.
+        /// </summary>
+        /// <returns></returns>
         public async Task<bool> FindUserByEmail(string email)
         {
-            var user = _entities.Users.Where(x => x.Email.Equals(email)).ToList();
+            var user = await _entities.Users.Where(x => x.Email.Equals(email)).ToListAsync();
             return user.Count() > 0 ? true : false;
 
         }
 
+        /// <summary>
+        /// Generating Password.
+        /// </summary>
+        /// <returns></returns>
         private static string GeneratePassword(int length = 8)
         {
             const string upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -124,12 +133,17 @@ namespace AL_EmpFeedbackSystem.Repository
             }
         }
 
+        /// <summary>
+        /// Random Number.
+        /// </summary>
+        /// <returns></returns>
         private static int RandomNumber(RandomNumberGenerator rng, int max)
         {
             var bytes = new byte[4];
             rng.GetBytes(bytes);
             return BitConverter.ToInt32(bytes, 0) & int.MaxValue % max;
         }
+
         /// <summary>
         /// GetUserByIdAsync
         /// </summary>
@@ -220,6 +234,20 @@ namespace AL_EmpFeedbackSystem.Repository
                     Address = x.Address,
                     PostalCode = x.PostalCode
                 }).ToListAsync();
+        }
+
+        /// <summary>
+        /// GetUsersList
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<UserDetails>> GetUsersList()
+        {
+            return await _entities.Users.Where(x => x.ActiveStatus == true)
+                .Select(x => new UserDetails
+                {
+                    Id = x.Id,
+                    Name = x.FirstName.GetFullName(x.LastName),
+                }).AsNoTracking().ToListAsync();
         }
     }
 }
