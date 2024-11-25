@@ -6,6 +6,5 @@ namespace AL_EmpFeedbackSystem.Identity.Models
     {
         public string Description { get; set; }
 
-        public virtual ICollection<IdentityUserRole<int>> UserRoles { get; set; }
     }
 }
