@@ -107,28 +107,39 @@ namespace AL_EmpFeedbackSystem.Repository
             }
         }
 
-
-
+        /// <summary>
+        /// GetAllUser
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<GetUserDetails>> GetAllUser()
         {
-            return await _entities.Users.Include(x => x.Manager) .Include(x => x.Lead).Include(x=>x.Designation)
-                .Select(x => new GetUserDetails
-                {
-                    Id = x.Id,                     
-                    FullName = x.FirstName.GetFullName(x.LastName),              
-                    ManagerName = x.ManagerId > 0 ? x.Manager.FirstName.GetFullName(x.Manager.LastName) : "",     
-                    LeadName = x.LeadId > 0 ? x.Lead.FirstName.GetFullName(x.Lead.LastName) : "",
-                    Email = x.Email,
-                    DateOfBirth = x.DateOfBirth,
-                    ServiceEndDate = x.ServiceEndDate,
-                    ServiceStartDate = x.ServiceStartDate,
-                    PostalCode = x.PostalCode,
-                    Address = x.Address,
-                    ActiveStatus = x.ActiveStatus,
-                    Designation = x.Designation.Name
-                })
-                .ToListAsync();
+            return await (from user in _entities.Users
+                          join userRole in _entities.UserRoles on user.Id equals userRole.UserId into userRolesGroup
+                          from userRole in userRolesGroup.DefaultIfEmpty()
+                          join role in _entities.Roles on userRole.RoleId equals role.Id into rolesGroup
+                          from role in rolesGroup.DefaultIfEmpty()
+                          select new GetUserDetails
+                          {
+                              Id = user.Id,
+                              FullName = user.FirstName.GetFullName(user.LastName),
+                              ManagerName = user.ManagerId > 0
+                                  ? user.Manager.FirstName.GetFullName(user.Manager.LastName)
+                                  : "",
+                              LeadName = user.LeadId > 0
+                                  ? user.Lead.FirstName.GetFullName(user.Lead.LastName)
+                                  : "",
+                              Email = user.Email,
+                              DateOfBirth = user.DateOfBirth,
+                              ServiceEndDate = user.ServiceEndDate,
+                              ServiceStartDate = user.ServiceStartDate,
+                              PostalCode = user.PostalCode,
+                              Address = user.Address,
+                              ActiveStatus = user.ActiveStatus,
+                              Designation = user.Designation.Name,
+                              UserRole = role != null ? role.Name : "No Role"
+                          }).ToListAsync();
         }
+
         /// <summary>
         /// Finding User By Email.
         /// </summary>
@@ -233,7 +244,7 @@ namespace AL_EmpFeedbackSystem.Repository
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<string> DeleteUserByIdAsync(int userId,string loggedInUserName)
+        public async Task<string> DeleteUserByIdAsync(int userId, string loggedInUserName)
         {
 
             if (userId > 0)

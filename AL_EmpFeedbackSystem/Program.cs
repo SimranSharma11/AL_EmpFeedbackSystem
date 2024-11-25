@@ -46,6 +46,17 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+var corsUrl = builder.Configuration["CorsConfigurations:URL"];
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ConfiguredPolicy", policy =>
+    {
+        policy.WithOrigins(corsUrl)
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 
 builder.Services.AddDbContext<AL_EmpFeedbackSystemDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -105,7 +116,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("ConfiguredPolicy");
 app.UseAuthentication(); 
 app.UseAuthorization();  
 

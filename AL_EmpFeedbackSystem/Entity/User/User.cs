@@ -1,6 +1,6 @@
 ﻿namespace AL_EmpFeedbackSystem.Entity.User
 {
-    public class User : BaseEntity
+    public class User 
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
