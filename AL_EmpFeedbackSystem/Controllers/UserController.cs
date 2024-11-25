@@ -24,7 +24,7 @@ namespace AL_EmpFeedbackSystem.Controllers
         /// <param name="userCreate">The user details to create.</param>
         /// <returns>A response message indicating success or failure.</returns>
         [HttpPost("create")]
-        public async Task<IActionResult> CreateUser([FromBody] UserCreate userCreate)
+        public async Task<IActionResult> CreateUser([FromBody] User userCreate)
         {
             try
             {
@@ -166,7 +166,31 @@ namespace AL_EmpFeedbackSystem.Controllers
         {
             try
             {
-                var result = await _userService.GetDesignationList();
+                var result = await _userService.GetRoleList();
+
+                if (result == null || result.Count == 0)
+                {
+                    return NotFound(new { message = "No User Present." });
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Get Userdetails list.
+        /// </summary>
+        /// <returns>A list of Userdetails.</returns>
+        [HttpGet("GetAllUser")]
+        public async Task<IActionResult> GetAllUser()
+        {
+            try
+            {
+                var result = await _userService.GetAllUser();
 
                 if (result == null || result.Count == 0)
                 {

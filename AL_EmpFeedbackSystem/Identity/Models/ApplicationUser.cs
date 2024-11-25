@@ -33,5 +33,7 @@ namespace AL_EmpFeedbackSystem.Identity.Models
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public string? UpdatedBy { get; set; }
+
+        public virtual ICollection<IdentityUserRole<int>> UserRoles { get; set; }
     }
 }

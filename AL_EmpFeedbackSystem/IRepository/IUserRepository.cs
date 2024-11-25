@@ -9,7 +9,7 @@ namespace AL_EmpFeedbackSystem.IRepository
         /// </summary>
         /// <param name="userCreate">The user details to create.</param>
         /// <returns>A response message indicating success or failure.</returns>
-        Task<string> CreateUser(UserCreate userCreate, string loggedInUserName);
+        Task<string> CreateUser(User userCreate, string loggedInUserName);
 
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace AL_EmpFeedbackSystem.IRepository
         /// </summary>
         /// <param name="userId">The ID of the user.</param>
         /// <returns>The user details.</returns>
-        Task<UserCreate> GetUserByIdAsync(int userId);
+        Task<User> GetUserByIdAsync(int userId);
 
         /// <summary>
         /// Delete a user by ID.
@@ -36,7 +36,7 @@ namespace AL_EmpFeedbackSystem.IRepository
         /// Get users assigned to the logged-in user.
         /// </summary>
         /// <returns>A list of assigned users.</returns>
-        Task<List<UserCreate>> GetAssignedUserAsync(int userId);
+        Task<List<User>> GetAssignedUserAsync(int userId);
 
         /// <summary>
         /// Get users list.
@@ -55,5 +55,11 @@ namespace AL_EmpFeedbackSystem.IRepository
         /// </summary>
         /// <returns>A list of Roles Id and Name.</returns>
         Task<List<ReferenceData>> GetRoleList();
+
+        /// <summary>
+        /// Get Userdetail list.
+        /// </summary>
+        /// <returns>A list of Userdetail</returns>
+        Task<List<GetUserDetails>> GetAllUser();
     }
 }

@@ -30,7 +30,7 @@ namespace AL_EmpFeedbackSystem.Repository
         /// <param name="userCreate"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<string> CreateUser(UserCreate userCreate, string loggedInUserName)
+        public async Task<string> CreateUser(User userCreate, string loggedInUserName)
         {
             var role = _entities.Roles.FirstOrDefault(x => x.Id == userCreate.RoleId);
             if (userCreate.Id == 0)
@@ -107,6 +107,28 @@ namespace AL_EmpFeedbackSystem.Repository
             }
         }
 
+
+
+        public async Task<List<GetUserDetails>> GetAllUser()
+        {
+            return await _entities.Users.Include(x => x.Manager) .Include(x => x.Lead).Include(x=>x.Designation)
+                .Select(x => new GetUserDetails
+                {
+                    Id = x.Id,                     
+                    FullName = x.FirstName.GetFullName(x.LastName),              
+                    ManagerName = x.ManagerId > 0 ? x.Manager.FirstName.GetFullName(x.Manager.LastName) : "",     
+                    LeadName = x.LeadId > 0 ? x.Lead.FirstName.GetFullName(x.Lead.LastName) : "",
+                    Email = x.Email,
+                    DateOfBirth = x.DateOfBirth,
+                    ServiceEndDate = x.ServiceEndDate,
+                    ServiceStartDate = x.ServiceStartDate,
+                    PostalCode = x.PostalCode,
+                    Address = x.Address,
+                    ActiveStatus = x.ActiveStatus,
+                    Designation = x.Designation.Name
+                })
+                .ToListAsync();
+        }
         /// <summary>
         /// Finding User By Email.
         /// </summary>
@@ -170,7 +192,7 @@ namespace AL_EmpFeedbackSystem.Repository
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<UserCreate> GetUserByIdAsync(int userId)
+        public async Task<User> GetUserByIdAsync(int userId)
         {
             if (userId <= 0)
             {
@@ -184,7 +206,7 @@ namespace AL_EmpFeedbackSystem.Repository
                 return null;
             }
 
-            var userCreate = new UserCreate
+            var userCreate = new User
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
@@ -243,10 +265,10 @@ namespace AL_EmpFeedbackSystem.Repository
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<List<UserCreate>> GetAssignedUserAsync(int userId)
+        public async Task<List<User>> GetAssignedUserAsync(int userId)
         {
             return await _entities.Users.Where(x => (x.LeadId == userId || x.ManagerId == userId) && x.ActiveStatus == true && x.IsDeleted == false)
-                .Select(x => new UserCreate
+                .Select(x => new User
                 {
                     Id = x.Id,
                     FirstName = x.FirstName,

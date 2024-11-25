@@ -1,5 +1,6 @@
 ﻿using AL_EmpFeedbackSystem.Entity.Login;
 using AL_EmpFeedbackSystem.Entity.Register;
+using AL_EmpFeedbackSystem.Extensions;
 using AL_EmpFeedbackSystem.Identity.Models;
 using AL_EmpFeedbackSystem.Interface;
 using Microsoft.AspNetCore.Identity;
@@ -71,7 +72,7 @@ namespace AL_EmpFeedbackSystem.Managers
         new Claim(ClaimTypes.Name, user.UserName),
         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim("loggedInUserName", user.FirstName + " " + user.LastName)
+        new Claim("loggedInUserName", user.FirstName.GetFullName(user.LastName))
     };
             claims.AddRange(roles.Select(role => new Claim("role", role)));
 
