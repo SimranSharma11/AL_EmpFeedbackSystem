@@ -10,6 +10,8 @@ namespace AL_EmpFeedbackSystem.DbModels.Entity
         public int Id { get; set; }
 
         public int GoalId { get; set; }
+        [ForeignKey("GoalId")]
+        public virtual Goal Goal { get; set; }
 
         public int UserId { get; set; }
 
@@ -25,6 +27,8 @@ namespace AL_EmpFeedbackSystem.DbModels.Entity
         public string? SelfComment { get; set; }
         public int? LeadRating { get; set; }
         public string? LeadComment { get; set; }
+        public string SubGoal { get; set; }
+        public string Description { get; set; }
         public DateTime CreatedDate { get; set; }
 
         public string CreatedBy { get; set; }

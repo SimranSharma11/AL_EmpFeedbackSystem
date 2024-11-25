@@ -4,6 +4,7 @@ using AL_EmpFeedbackSystem.DbModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AL_EmpFeedbackSystem.Migrations
 {
     [DbContext(typeof(AL_EmpFeedbackSystemDbContext))]
-    partial class AL_EmpFeedbackSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241125193137_SubGoal")]
+    partial class SubGoal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,8 +217,6 @@ namespace AL_EmpFeedbackSystem.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DurationId");
-
-                    b.HasIndex("GoalId");
 
                     b.HasIndex("UserId");
 
@@ -544,12 +544,6 @@ namespace AL_EmpFeedbackSystem.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AL_EmpFeedbackSystem.DbModels.Entity.Goal", "Goal")
-                        .WithMany()
-                        .HasForeignKey("GoalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("AL_EmpFeedbackSystem.Identity.Models.ApplicationUser", "Users")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -557,8 +551,6 @@ namespace AL_EmpFeedbackSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("Duration");
-
-                    b.Navigation("Goal");
 
                     b.Navigation("Users");
                 });

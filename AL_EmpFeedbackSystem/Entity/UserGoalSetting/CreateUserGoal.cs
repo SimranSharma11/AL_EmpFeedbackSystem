@@ -8,5 +8,7 @@ namespace AL_EmpFeedbackSystem.Entity.UserGoalSetting
         public int UserId { get; set; }
         public int GoalId { get; set; }
         public int DurationId { get; set; }
+        public string SubGoal { get; set; }
+        public string Description { get; set; }
     }
 }

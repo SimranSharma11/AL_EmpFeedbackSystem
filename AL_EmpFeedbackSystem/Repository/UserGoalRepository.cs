@@ -1,7 +1,9 @@
 ﻿using AL_EmpFeedbackSystem.DbModels;
 using AL_EmpFeedbackSystem.DbModels.Entity;
 using AL_EmpFeedbackSystem.Entity.UserGoalSetting;
+using AL_EmpFeedbackSystem.Extensions;
 using AL_EmpFeedbackSystem.IRepository;
+using AL_EmpFeedbackSystem.Migrations;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 
@@ -31,6 +33,8 @@ namespace AL_EmpFeedbackSystem.Repository
                     UserId = userGoal.UserId,
                     DurationId = userGoal.DurationId,
                     GoalId = userGoal.GoalId,
+                    SubGoal = userGoal.SubGoal,
+                    Description = userGoal.Description,
                     CreatedBy = loggedInUserName,
                     CreatedDate = DateTime.Now
                 };
@@ -46,12 +50,15 @@ namespace AL_EmpFeedbackSystem.Repository
         public async Task<List<UserGoal>> GetUserGoalList()
         {
             var userGoals = await _entities.UserGoalSettings
+                .Include(x=>x.Users).Include(x=>x.Duration).Include(x=>x.Goal)
                 .Select(x => new UserGoal
                 {
                     Id = x.Id,
-                    UserId = x.UserId,
-                    DurationId = x.DurationId,
-                    GoalId = x.GoalId,
+                    UserName = x.Users.FirstName.GetFullName(x.Users.LastName),
+                    Duration = x.Duration.Name,
+                    Goal = x.Goal.Name,
+                    Description = x.Description,
+                    SubGoal = x.SubGoal,
                     CreatedBy = x.CreatedBy,
                     CreatedDate = x.CreatedDate
                 })
@@ -64,13 +71,16 @@ namespace AL_EmpFeedbackSystem.Repository
         public async Task<List<UserGoal>> GetSelfGoalList(int loggedInUserId)
         {
             var selfGoals = await _entities.UserGoalSettings
+                .Include(x => x.Users).Include(x => x.Duration).Include(x => x.Goal)
                 .Where(x => x.UserId == loggedInUserId)
                 .Select(x => new UserGoal
                 {
                     Id = x.Id,
-                    UserId = x.UserId,
-                    DurationId = x.DurationId,
-                    GoalId = x.GoalId,
+                    UserName = x.Users.FirstName.GetFullName(x.Users.LastName),
+                    Duration = x.Duration.Name,
+                    Goal = x.Goal.Name,
+                    Description = x.Description,
+                    SubGoal = x.SubGoal,
                     CreatedBy = x.CreatedBy,
                     CreatedDate = x.CreatedDate
                 })
@@ -88,13 +98,16 @@ namespace AL_EmpFeedbackSystem.Repository
                 .ToListAsync();
 
             var leadGoals = await _entities.UserGoalSettings
+                .Include(x => x.Users).Include(x => x.Duration).Include(x => x.Goal)
                 .Where(x => userIds.Contains(x.UserId))
                 .Select(x => new UserGoal
                 {
                     Id = x.Id,
-                    UserId = x.UserId,
-                    DurationId = x.DurationId,
-                    GoalId = x.GoalId,
+                    UserName = x.Users.FirstName.GetFullName(x.Users.LastName),
+                    Duration = x.Duration.Name,
+                    Goal = x.Goal.Name,
+                    Description = x.Description,
+                    SubGoal = x.SubGoal,
                     CreatedBy = x.CreatedBy,
                     CreatedDate = x.CreatedDate
                 })
@@ -106,7 +119,9 @@ namespace AL_EmpFeedbackSystem.Repository
 
         public async Task<UserGoal?> GetUserGoalById(int userGoalId)
         {
-            var userGoalSettings = await _entities.UserGoalSettings.FirstOrDefaultAsync(x => x.Id == userGoalId);
+            var userGoalSettings = await _entities.UserGoalSettings
+                .Include(x => x.Users).Include(x => x.Duration).Include(x => x.Goal)
+                .FirstOrDefaultAsync(x => x.Id == userGoalId);
 
             if (userGoalSettings == null)
             {
@@ -119,6 +134,11 @@ namespace AL_EmpFeedbackSystem.Repository
                 UserId = userGoalSettings.UserId,
                 DurationId = userGoalSettings.DurationId,
                 GoalId = userGoalSettings.GoalId,
+                UserName = userGoalSettings.Users.FirstName.GetFullName(userGoalSettings.Users.LastName),
+                Duration = userGoalSettings.Duration.Name,
+                Goal = userGoalSettings.Goal.Name,
+                Description = userGoalSettings.Description,
+                SubGoal = userGoalSettings.SubGoal,
                 LeadComment = userGoalSettings.LeadComment,
                 SelfComment = userGoalSettings.SelfComment,
                 LeadRating = userGoalSettings.LeadRating,
@@ -143,8 +163,6 @@ namespace AL_EmpFeedbackSystem.Repository
             if (existingGoal == null)
                 throw new InvalidOperationException($"No goal found with ID {updatedGoal.Id}.");
 
-            existingGoal.DurationId = updatedGoal.DurationId;
-            existingGoal.GoalId = updatedGoal.GoalId;
             existingGoal.LeadComment = updatedGoal.LeadComment;
             existingGoal.SelfComment = updatedGoal.SelfComment;
             existingGoal.LeadRating = updatedGoal.LeadRating;
