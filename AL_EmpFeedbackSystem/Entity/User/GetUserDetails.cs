@@ -3,7 +3,8 @@
     public class GetUserDetails
     {
         public int Id { get; set; }
-        public string FullName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Email { get; set; }
         public string? LeadName { get; set; }
         public string? ManagerName { get; set; }

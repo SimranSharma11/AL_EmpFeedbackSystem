@@ -121,7 +121,8 @@ namespace AL_EmpFeedbackSystem.Repository
                           select new GetUserDetails
                           {
                               Id = user.Id,
-                              FullName = user.FirstName.GetFullName(user.LastName),
+                              FirstName = user.FirstName,
+                              LastName = user.LastName,
                               ManagerName = user.ManagerId > 0
                                   ? user.Manager.FirstName.GetFullName(user.Manager.LastName)
                                   : "",
