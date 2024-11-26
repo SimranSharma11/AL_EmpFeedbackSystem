@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AL_EmpFeedbackSystem.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class UserGoalController : Controller
     {
         private readonly IUserGoalService _userGoalService;
