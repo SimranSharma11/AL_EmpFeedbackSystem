@@ -8,7 +8,7 @@ namespace AL_EmpFeedbackSystem.Interface
         Task<List<UserGoalSetting>> CreateUserGoal(List<CreateUserGoal> createUserGoal, string loggedInUserName);
         Task<List<UserGoal>> GetUserGoalList();
         Task<List<UserGoal>> GetSelfGoalList(int loggedInUserId);
-        Task<List<UserGoal>> GetLeadGoalList(int loggedInUserId);
+        Task<List<UserGoal>> GetLeadGoalList(string userGoalName);
         Task<UserGoal?> GetUserGoalById(int userGoalId);
         Task<string> UpdateUserGoal(UserGoal updatedGoal, string updatedBy);
         Task<List<UserGoal>> GetRecentPendingSelfGoalList(int loggedInUserId);

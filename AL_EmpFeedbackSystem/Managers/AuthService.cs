@@ -72,7 +72,8 @@ namespace AL_EmpFeedbackSystem.Managers
         new Claim(ClaimTypes.Name, user.UserName),
         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim("loggedInUserName", user.FirstName.GetFullName(user.LastName))
+        new Claim("loggedInUserName", user.FirstName.GetFullName(user.LastName)),
+        new Claim("userId", user.Id.ToString())
     };
             claims.AddRange(roles.Select(role => new Claim("role", role)));
 

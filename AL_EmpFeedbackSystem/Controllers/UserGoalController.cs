@@ -59,8 +59,8 @@ namespace AL_EmpFeedbackSystem.Controllers
         [HttpGet("GetLeadGoalList")]
         public async Task<IActionResult> GetLeadGoalList()
         {
-            var loggedInUserId = this.HttpContext.GetUserId();
-            var leadGoals = await _userGoalService.GetLeadGoalList(loggedInUserId);
+            var loggedInUserName = this.HttpContext.GetUserName();
+            var leadGoals = await _userGoalService.GetLeadGoalList(loggedInUserName);
             return Ok(leadGoals);
         }
 

@@ -11,7 +11,7 @@
                 if (context == null)
                     userId = 0;
                 else
-                    userId = Convert.ToInt32(context.User.Claims.Where(c => c.Type == "UniqueUserId").Select(c => c.Value).SingleOrDefault());
+                    userId = Convert.ToInt32(context.User.Claims.Where(c => c.Type == "userId").Select(c => c.Value).SingleOrDefault());
 
                 return userId;
             }
@@ -31,7 +31,7 @@
                 if (context == null)
                     userName = "SYSTEM";
                 else
-                    userName = context.User.Claims.Where(c => c.Type == "loggedInUserName").Select(c => c.Value).SingleOrDefault();
+                    userName = context.User.Claims.Where(c => c.Type == "name").Select(c => c.Value).SingleOrDefault();
 
                 return userName;
             }

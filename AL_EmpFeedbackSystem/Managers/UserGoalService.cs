@@ -28,9 +28,9 @@ namespace AL_EmpFeedbackSystem.Managers
             var result = await _userGoalRepository.GetSelfGoalList(loggedInUserId);
             return result;
         }
-        public async Task<List<UserGoal>> GetLeadGoalList(int loggedInUserId)
+        public async Task<List<UserGoal>> GetLeadGoalList(string loggedInUserName)
         {
-            var result = await _userGoalRepository.GetLeadGoalList(loggedInUserId);
+            var result = await _userGoalRepository.GetLeadGoalList(loggedInUserName);
             return result;
         }
         public async Task<UserGoal?> GetUserGoalById(int userGoalId)

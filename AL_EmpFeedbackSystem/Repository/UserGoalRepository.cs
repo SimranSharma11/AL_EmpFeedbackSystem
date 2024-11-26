@@ -90,16 +90,11 @@ namespace AL_EmpFeedbackSystem.Repository
         }
 
 
-        public async Task<List<UserGoal>> GetLeadGoalList(int loggedInUserId)
+        public async Task<List<UserGoal>> GetLeadGoalList(string loggedInUserName)
         {
-            var userIds = await _entities.Users
-                .Where(x => x.LeadId == loggedInUserId || x.ManagerId == loggedInUserId)
-                .Select(x => x.Id)
-                .ToListAsync();
-
             var leadGoals = await _entities.UserGoalSettings
                 .Include(x => x.Users).Include(x => x.Duration).Include(x => x.Goal)
-                .Where(x => userIds.Contains(x.UserId))
+                .Where(x => x.CreatedBy.Equals(loggedInUserName))
                 .Select(x => new UserGoal
                 {
                     Id = x.Id,
