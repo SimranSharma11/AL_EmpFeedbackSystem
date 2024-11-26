@@ -57,9 +57,15 @@ namespace AL_EmpFeedbackSystem.IRepository
         Task<List<ReferenceData>> GetRoleList();
 
         /// <summary>
-        /// Get Userdetail list.
+        /// Get UserDetail list.
         /// </summary>
-        /// <returns>A list of Userdetail</returns>
+        /// <returns>A list of UserDetail</returns>
         Task<List<GetUserDetails>> GetAllUser();
+
+        /// <summary>
+        /// Get Recent User
+        /// </summary>
+        /// <returns></returns>
+        Task<List<GetUserDetails>> GetRecentUser();
     }
 }

@@ -1,10 +1,7 @@
 ﻿using AL_EmpFeedbackSystem.DbModels;
 using AL_EmpFeedbackSystem.DbModels.Entity;
 using AL_EmpFeedbackSystem.Entity.Goal;
-using AL_EmpFeedbackSystem.Extensions;
-using AL_EmpFeedbackSystem.Identity.Models;
 using AL_EmpFeedbackSystem.IRepository;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace AL_EmpFeedbackSystem.Repository
@@ -142,5 +139,28 @@ namespace AL_EmpFeedbackSystem.Repository
                     Name = x.Name,
                 }).AsNoTracking().ToListAsync();
         }
+
+        /// <summary>
+        /// Getting the most recent goal details and total count of active goals.
+        /// </summary>
+        /// <returns>A tuple containing the list of recent goals and the total count of active goals.</returns>
+        public async Task<List<GoalDetails>> GetRecentGoalsList()
+        {
+
+            // Query for the most recent three active goals
+            var recentGoalsTask = await _entities.Goals
+                .Where(x => x.IsActive == true)
+                .OrderByDescending(x => x.CreatedDate)
+                .Take(3)
+                .Select(x => new GoalDetails
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                })
+                .AsNoTracking()
+                .ToListAsync();
+            return recentGoalsTask;
+        }
+
     }
 }

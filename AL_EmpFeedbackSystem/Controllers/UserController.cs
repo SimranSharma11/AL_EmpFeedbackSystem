@@ -182,15 +182,39 @@ namespace AL_EmpFeedbackSystem.Controllers
         }
 
         /// <summary>
-        /// Get Userdetails list.
+        /// Get UserDetails list.
         /// </summary>
-        /// <returns>A list of Userdetails.</returns>
+        /// <returns>A list of UserDetails.</returns>
         [HttpGet("GetAllUser")]
         public async Task<IActionResult> GetAllUser()
         {
             try
             {
                 var result = await _userService.GetAllUser();
+
+                if (result == null || result.Count == 0)
+                {
+                    return NotFound(new { message = "No User Present." });
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Get UserDetails list.
+        /// </summary>
+        /// <returns>A list of UserDetails.</returns>
+        [HttpGet("GetRecentUser")]
+        public async Task<IActionResult> GetRecentUser()
+        {
+            try
+            {
+                var result = await _userService.GetRecentUser();
 
                 if (result == null || result.Count == 0)
                 {

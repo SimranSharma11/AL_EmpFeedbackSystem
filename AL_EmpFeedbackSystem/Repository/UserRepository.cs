@@ -335,5 +335,43 @@ namespace AL_EmpFeedbackSystem.Repository
                     Name = x.Name,
                 }).AsNoTracking().ToListAsync();
         }
+
+        /// <summary>
+        /// Get Recent User
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<GetUserDetails>> GetRecentUser()
+        {
+                return await (from user in _entities.Users
+                              orderby user.CreatedDate descending 
+                              select new GetUserDetails
+                              {
+                                  Id = user.Id,
+                                  FirstName = user.FirstName,
+                                  LastName = user.LastName,
+                                  ManagerName = user.ManagerId > 0
+                                      ? user.Manager.FirstName.GetFullName(user.Manager.LastName)
+                                      : "",
+                                  LeadName = user.LeadId > 0
+                                      ? user.Lead.FirstName.GetFullName(user.Lead.LastName)
+                                      : "",
+                                  Email = user.Email,
+                                  DateOfBirth = user.DateOfBirth,
+                                  ServiceEndDate = user.ServiceEndDate,
+                                  ServiceStartDate = user.ServiceStartDate,
+                                  PostalCode = user.PostalCode,
+                                  Address = user.Address,
+                                  ActiveStatus = user.ActiveStatus,
+                                  Designation = user.Designation.Name,
+                                  UserRole = (from ur in _entities.UserRoles
+                                              join r in _entities.Roles on ur.RoleId equals r.Id
+                                              where ur.UserId == user.Id
+                                              select r.Name).FirstOrDefault() ?? "No Role"
+                              })
+                              .Take(3) 
+                              .ToListAsync();
+        }
+
+
     }
 }

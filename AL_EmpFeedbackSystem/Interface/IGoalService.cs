@@ -45,5 +45,11 @@ namespace AL_EmpFeedbackSystem.Interface
         /// </summary>
         /// <returns>List of Designations.</returns>
         Task<List<DesignationDetail>> GetDesignationList();
+
+        /// <summary>
+        /// Get users list.
+        /// </summary>
+        /// <returns>A list of users Id and Name.</returns>
+        Task<List<GoalDetails>> GetRecentGoalsList();
     }
 }

@@ -154,5 +154,29 @@ namespace AL_EmpFeedbackSystem.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Getting recent goals List
+        /// </summary>
+        /// <returns>List of Goals.</returns>
+        [HttpGet("GetRecentGoalsList")]
+        public async Task<IActionResult> GetRecentGoalsList()
+        {
+            try
+            {
+                var result = await _goalService.GetRecentGoalsList();
+
+                if (result == null || result.Count == 0)
+                {
+                    return NotFound(new { message = "No Goals Present." });
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
     }
 }

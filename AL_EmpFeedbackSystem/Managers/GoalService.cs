@@ -82,5 +82,15 @@ namespace AL_EmpFeedbackSystem.Managers
             var result = await _goalRepository.GetDesignationList();
             return result;
         }
+
+        /// <summary>
+        /// Get users list.
+        /// </summary>
+        /// <returns>A list of users Id and Name.</returns>
+        public async Task<List<GoalDetails>> GetRecentGoalsList()
+        {
+            var result = await _goalRepository.GetRecentGoalsList();
+            return result;
+        }
     }
 }

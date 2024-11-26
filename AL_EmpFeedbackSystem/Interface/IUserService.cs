@@ -54,5 +54,11 @@ namespace AL_EmpFeedbackSystem.Interface
         /// </summary>
         /// <returns>A list of UserDetails.</returns>
         Task<List<GetUserDetails>> GetAllUser();
+
+        /// <summary>
+        /// Get Recent Users list.
+        /// </summary>
+        /// <returns>A users list with Id and Name.</returns>
+        Task<List<GetUserDetails>> GetRecentUser();
     }
 }

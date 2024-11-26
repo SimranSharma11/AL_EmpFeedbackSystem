@@ -105,5 +105,15 @@ namespace AL_EmpFeedbackSystem.Managers
             var result = await _userRepository.GetAllUser();
             return result;
         }
+
+        /// <summary>
+        /// Get Recent Users list.
+        /// </summary>
+        /// <returns>A users list with Id and Name.</returns>
+        public async Task<List<GetUserDetails>> GetRecentUser()
+        {
+            var result = await _userRepository.GetRecentUser();
+            return result;
+        }
     }
 }

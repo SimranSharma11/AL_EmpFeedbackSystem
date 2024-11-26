@@ -43,5 +43,11 @@ namespace AL_EmpFeedbackSystem.IRepository
         /// </summary>
         /// <returns>List of Designation.</returns>
         Task<List<DesignationDetail>> GetDesignationList();
+
+        /// <summary>
+        /// Getting recent goal Details
+        /// </summary>
+        /// <returns>List of Goals.</returns>
+        Task<List<GoalDetails>> GetRecentGoalsList();
     }
 }
