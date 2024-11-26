@@ -99,5 +99,27 @@ namespace AL_EmpFeedbackSystem.Controllers
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
+        /// <summary>
+        /// Get a list of goals for the users reporting to the specified lead/manager.
+        /// </summary>
+        [HttpGet("GetRecentPendingSelfGoalList")]
+        public async Task<IActionResult> GetRecentPendingSelfGoalList()
+        {
+            var loggedInUserId = this.HttpContext.GetUserId();
+            var leadGoals = await _userGoalService.GetRecentPendingSelfGoalList(loggedInUserId);
+            return Ok(leadGoals);
+        }
+
+        /// <summary>
+        /// Get a list of goals where logged in user is Lead for the users reporting to the specified lead/manager.
+        /// </summary>
+        [HttpGet("GetRecentPendingLeadGoalList")]
+        public async Task<IActionResult> GetRecentPendingLeadGoalList()
+        {
+            var loggedInUserId = this.HttpContext.GetUserId();
+            var leadGoals = await _userGoalService.GetRecentPendingLeadGoalList(loggedInUserId);
+            return Ok(leadGoals);
+        }
     }
 }

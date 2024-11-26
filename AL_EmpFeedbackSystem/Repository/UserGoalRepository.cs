@@ -174,5 +174,55 @@ namespace AL_EmpFeedbackSystem.Repository
 
             return $"Goal with ID {updatedGoal.Id} has been successfully updated.";
         }
+
+        public async Task<List<UserGoal>> GetRecentPendingSelfGoalList(int loggedInUserId)
+        {
+            var selfGoals = await _entities.UserGoalSettings
+                .Include(x => x.Users).Include(x => x.Duration).Include(x => x.Goal)
+                .Where(x => x.UserId == loggedInUserId)
+                .OrderByDescending(x => x.Id)
+                .Select(x => new UserGoal
+                {
+                    Id = x.Id,
+                    UserName = x.Users.FirstName.GetFullName(x.Users.LastName),
+                    Duration = x.Duration.Name,
+                    Goal = x.Goal.Name,
+                    Description = x.Description,
+                    SubGoal = x.SubGoal,
+                    CreatedBy = x.CreatedBy,
+                    CreatedDate = x.CreatedDate
+                })
+                .ToListAsync();
+
+            return selfGoals;
+        }
+
+
+        public async Task<List<UserGoal>> GetRecentPendingLeadGoalList(int loggedInUserId)
+        {
+            var userIds = await _entities.Users
+                .Where(x => x.LeadId == loggedInUserId || x.ManagerId == loggedInUserId)
+                .Select(x => x.Id)
+                .ToListAsync();
+
+            var leadGoals = await _entities.UserGoalSettings
+                .Include(x => x.Users).Include(x => x.Duration).Include(x => x.Goal)
+                .Where(x => userIds.Contains(x.UserId))
+                .OrderByDescending(x => x.Id)
+                .Select(x => new UserGoal
+                {
+                    Id = x.Id,
+                    UserName = x.Users.FirstName.GetFullName(x.Users.LastName),
+                    Duration = x.Duration.Name,
+                    Goal = x.Goal.Name,
+                    Description = x.Description,
+                    SubGoal = x.SubGoal,
+                    CreatedBy = x.CreatedBy,
+                    CreatedDate = x.CreatedDate
+                })
+                .ToListAsync();
+
+            return leadGoals;
+        }
     }
 }

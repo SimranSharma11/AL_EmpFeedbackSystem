@@ -42,5 +42,16 @@ namespace AL_EmpFeedbackSystem.Managers
             var result = await _userGoalRepository.UpdateUserGoal(userGoal, loggedInUserName);
             return result;
         }
+
+        public async Task<List<UserGoal>> GetRecentPendingSelfGoalList(int loggedInUserId)
+        {
+            var result = await _userGoalRepository.GetRecentPendingSelfGoalList(loggedInUserId);
+            return result;
+        }
+        public async Task<List<UserGoal>> GetRecentPendingLeadGoalList(int loggedInUserId)
+        {
+            var result = await _userGoalRepository.GetRecentPendingLeadGoalList(loggedInUserId);
+            return result;
+        }
     }
 }

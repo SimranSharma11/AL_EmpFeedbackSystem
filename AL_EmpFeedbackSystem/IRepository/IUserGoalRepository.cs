@@ -10,5 +10,7 @@ namespace AL_EmpFeedbackSystem.IRepository
         Task<List<UserGoal>> GetLeadGoalList(int loggedInUserId);
         Task<UserGoal?> GetUserGoalById(int userGoalId);
         Task<string> UpdateUserGoal(UserGoal updatedGoal, string updatedBy);
+        Task<List<UserGoal>> GetRecentPendingSelfGoalList(int loggedInUserId);
+        Task<List<UserGoal>> GetRecentPendingLeadGoalList(int loggedInUserId);
     }
 }
