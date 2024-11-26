@@ -1,10 +1,11 @@
-﻿using AL_EmpFeedbackSystem.Entity.UserGoalSetting;
+﻿using AL_EmpFeedbackSystem.DbModels.Entity;
+using AL_EmpFeedbackSystem.Entity.UserGoalSetting;
 
 namespace AL_EmpFeedbackSystem.IRepository
 {
     public interface IUserGoalRepository
     {
-        Task<string> CreateUserGoal(List<CreateUserGoal> createUserGoal, string loggedInUserName);
+        Task<List<UserGoalSetting>> CreateUserGoal(List<CreateUserGoal> createUserGoal, string loggedInUserName);
         Task<List<UserGoal>> GetUserGoalList();
         Task<List<UserGoal>> GetSelfGoalList(int loggedInUserId);
         Task<List<UserGoal>> GetLeadGoalList(int loggedInUserId);

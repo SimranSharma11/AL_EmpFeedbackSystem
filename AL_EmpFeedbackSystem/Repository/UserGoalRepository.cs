@@ -18,11 +18,11 @@ namespace AL_EmpFeedbackSystem.Repository
             _entities = entities;
         }
 
-        public async Task<string> CreateUserGoal(List<CreateUserGoal> createUserGoal, string loggedInUserName)
+        public async Task<List<UserGoalSetting>> CreateUserGoal(List<CreateUserGoal> createUserGoal, string loggedInUserName)
         {
             if (createUserGoal == null || !createUserGoal.Any())
             {
-                return "No user goals to create.";
+                return null;
             }
 
             List<UserGoalSetting> userGoalSettings = new List<UserGoalSetting>();
@@ -44,7 +44,7 @@ namespace AL_EmpFeedbackSystem.Repository
             await _entities.UserGoalSettings.AddRangeAsync(userGoalSettings);
             await _entities.SaveChangesAsync();
 
-            return "User goals created successfully.";
+            return userGoalSettings;
         }
 
         public async Task<List<UserGoal>> GetUserGoalList()

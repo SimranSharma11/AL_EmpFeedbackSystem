@@ -1,4 +1,5 @@
-﻿using AL_EmpFeedbackSystem.Entity.UserGoalSetting;
+﻿using AL_EmpFeedbackSystem.DbModels.Entity;
+using AL_EmpFeedbackSystem.Entity.UserGoalSetting;
 using AL_EmpFeedbackSystem.Interface;
 using AL_EmpFeedbackSystem.IRepository;
 
@@ -12,7 +13,7 @@ namespace AL_EmpFeedbackSystem.Managers
             _userGoalRepository = userGoalRepository;
         }
 
-        public async Task<string> CreateUserGoal(List<CreateUserGoal> createUserGoal, string loggedInUserName)
+        public async Task<List<UserGoalSetting>> CreateUserGoal(List<CreateUserGoal> createUserGoal, string loggedInUserName)
         {
             var result = await _userGoalRepository.CreateUserGoal(createUserGoal, loggedInUserName);
             return result;
